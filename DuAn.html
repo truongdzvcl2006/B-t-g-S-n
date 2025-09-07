@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Navbar chính */
+        .navbar {
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            padding: 20px 0;
+            background-color: rgba(0, 0, 0, 0.8) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar.scrolled {
+            padding: 10px 0;
+            background-color: rgba(0, 0, 0, 0.95) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Logo */
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        
+        .navbar-brand .logo-text {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .navbar-brand .logo-text::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #4e73df;
+            transition: width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .navbar-brand:hover .logo-text::after {
+            width: 100%;
+        }
+        
+        /* Menu items */
+        .nav-item {
+            margin: 0 5px;
+            position: relative;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 8px 20px !important;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.6s ease;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        /* Active item indicator */
+        .nav-item.active .nav-link {
+            color: #4e73df !important;
+        }
+        
+        .nav-item.active .nav-link::after {
+            transform: scaleX(1);
+        }
+        
+        /* Dropdown menu */
+        .dropdown-menu {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-top: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: block;
+        }
+        
+        .dropdown:hover .dropdown-menu,
+        .dropdown:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(5px);
+        }
+        
+        .dropdown-item {
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 5px;
+            background: #4e73df;
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background: transparent;
+            padding-left: 30px;
+            color: #4e73df !important;
+        }
+        
+        .dropdown-item:hover::before {
+            opacity: 1;
+            left: 15px;
+        }
+        
+        /* CTA Button */
+        .nav-cta {
+            background: linear-gradient(135deg, #4e73df 0%, #3a5bbf 100%);
+            color: white !important;
+            border-radius: 30px;
+            padding: 10px 25px !important;
+            margin-left: 15px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(78, 115, 223, 0.4);
+        }
+        
+        .nav-cta::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3a5bbf 0%, #4e73df 100%);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        
+        .nav-cta:hover::after {
+            opacity: 1;
+        }
+        
+        /* Mobile menu */
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                padding: 20px;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                transform: translateY(-150%);
+                opacity: 0;
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+                border-radius: 0 0 15px 15px;
+            }
+            
+            .navbar-collapse.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            .nav-item {
+                margin: 10px 0;
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.4s ease;
+            }
+            
+            .navbar-collapse.show .nav-item {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+            /* Tạo hiệu ứng xuất hiện tuần tự */
+            .navbar-collapse.show .nav-item:nth-child(1) { transition-delay: 0.1s; }
+            .navbar-collapse.show .nav-item:nth-child(2) { transition-delay: 0.2s; }
+            .navbar-collapse.show .nav-item:nth-child(3) { transition-delay: 0.3s; }
+            .navbar-collapse.show .nav-item:nth-child(4) { transition-delay: 0.4s; }
+            .navbar-collapse.show .nav-item:nth-child(5) { transition-delay: 0.5s; }
+            
+            .nav-cta {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+        }
+
+
+        .hero-section {
+            position: relative;
+            height: 80vh;
+            min-height: 500px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            color: white;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-right: 15px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background-color: #4e73df;
+            border-color: #4e73df;
+        }
+        
+        .btn-outline-light:hover {
+            color: #333;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 70vh;
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-text {
+                font-size: 1rem;
+            }
+            
+            .hero-btns {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-btn {
+                width: 80%;
+                max-width: 250px;
+                margin-right: 0;
+            }
+        }
+
+
+        .property-section {
+            padding: 80px 0;
+            background-color: #f8f9fa;
+        }
+        
+        .property-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            margin-bottom: 30px;
+            height: 100%;
+            background: white;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .property-img {
+            height: 200px;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .property-card:hover .property-img {
+            transform: scale(1.05);
+        }
+        
+        .property-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 30px;
+        }
+        
+        .property-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4e73df;
+        }
+        
+        .property-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .feature-badge {
+            background-color: rgba(78, 115, 223, 0.1);
+            color: #4e73df;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+        }
+        
+        .search-box {
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .search-box input {
+            padding-left: 45px;
+            border-radius: 30px;
+            height: 50px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 15px;
+            color: #6c757d;
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .pagination .page-item.active .page-link {
+            background-color: #4e73df;
+            border-color: #4e73df;
+        }
+        
+        .pagination .page-link {
+            color: #4e73df;
+            margin: 0 5px;
+            border-radius: 50% !important;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --dark-color: #1b263b;
+            --light-color: #f8f9fa;
+            --success-color: #4cc9f0;
+            --danger-color: #f72585;
+            --warning-color: #f8961e;
+            --info-color: #43aa8b;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --dark: #1b263b;
+            --light: #f8f9fa;
+            --danger: #f72585;
+            --success: #4cc9f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .product-location {
+            display: flex;
+            align-items: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-location i {
+            margin-right: 5px;
+            color: var(--accent);
+        }
+
+        .product-stats {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(67, 97, 238, 0.1);
+            padding: 0.8rem;
+            border-radius: 8px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 2rem auto;
+            border-radius: 12px;
+            overflow: hidden;
+            max-width: 900px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-header {
+            position: relative;
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .modal-header::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        }
+
+        .modal-title {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 1.5rem;
+            color: white;
+            font-size: 1.8rem;
+            z-index: 2;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 3;
+            background: rgba(0,0,0,0.5);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            transform: rotate(90deg);
+            background: var(--danger);
+        }
+
+        .modal-body {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .modal-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--danger);
+            margin-bottom: 1rem;
+        }
+
+        .modal-location {
+            display: flex;
+            align-items: center;
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .modal-location i {
+            margin-right: 8px;
+            color: var(--accent);
+        }
+
+        .modal-description {
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-stat {
+            background: rgba(67, 97, 238, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .modal-stat-value {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .modal-stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .modal-amenities {
+            margin-top: 1rem;
+        }
+
+        .amenities-title {
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .amenities-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .amenity {
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .amenity i {
+            margin-right: 5px;
+            font-size: 0.7rem;
+        }
+
+        .modal-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .gallery-item {
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+        }
+
+        .gallery-item.main {
+            grid-column: span 2;
+            height: 200px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            grid-column: 1 / -1;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(67, 97, 238, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-header {
+                height: 200px;
+            }
+            
+            .products-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        /* Thanh tìm kiếm bên phải */
+        .search-right {
+            
+            margin-left: auto;
+            position: relative;
+        }
+
+        .search-box-right {
+            display: flex;
+            align-items: center;
+            background: rgba(226, 226, 226, 0.678);
+            border-radius: 50px;
+            padding: 5px 15px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .search-box-right:focus-within {
+            background: rgba(197, 197, 197, 0.562);
+            border-color: rgba(197, 197, 197, 0.562);
+        }
+
+        .search-box-right input {
+            background: transparent;
+            border: none;
+            color: black;
+            padding: 5px 10px;
+            width: 0;
+            flex-grow: 1;
+            transition: width 0.3s ease;
+            outline: none;
+        }
+
+        .search-box-right input::placeholder {
+            color: rgba(5, 0, 0, 0.7);
+        }
+
+        .search-box-right button {
+            background: transparent;
+            border: none;
+            color: gray;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box-right button:hover {
+            transform: scale(1.1);
+        }
+
+        .search-results-right {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: none;
+            margin-top: 10px;
+            z-index: 1000;
+            animation: fadeInRight 0.3s ease-out;
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .search-results-right.show {
+            display: block;
+        }
+
+        .search-result-item-right {
+            padding: 12px 15px;
+            border-bottom: 1px solid gray;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-result-item-right:hover {
+            background-color: rgb(233, 231, 231);
+        }
+
+        .search-result-item-right img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 12px;
+        }
+
+        .search-result-info-right {
+            flex: 1;
+        }
+
+        .search-result-title-right {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: #2c3e50;
+        }
+
+        .search-result-price-right {
+            font-size: 0.8rem;
+            color: #e74c3c;
+            font-weight: 700;
+        }
+
+        .no-results-right {
+            padding: 15px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-right {
+                width: 100%;
+                margin-top: 10px;
+        }
+        
+        .search-box-right {
+            width: 100%;
+        }
+        
+        .search-results-right {
+            width: 100%;
+            right: auto;
+            left: 0;
+        }
+        }
+        
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="Trangchu.html">
+                <i class="fas fa-rocket me-2"></i>
+                <span class="logo-text">Brand</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="Trangchu.html">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" aria-expanded="false">
+                            Dịch vụ
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                            <li><a class="dropdown-item" href="#">Bất động sản</a></li>
+                            <li><a class="dropdown-item" href="#">Nhà</a></li>
+                            <li><a class="dropdown-item" href="#">Văn phòng cho thuê</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Xem tất cả</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="DuAn.html">Dự án</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="LienHe.html">Liên hệ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-cta" href="#">
+                            <i class="fas fa-phone-alt me-2"></i>Gọi ngay
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    
+
+    <!-- Phần giới thiệu hero section -->
+    <section class="hero-section">
+        <!-- Hình nền -->
+        <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+             alt="Hình nền giới thiệu" class="hero-image">
+        
+        <!-- Lớp phủ màu -->
+        <div class="hero-overlay"></div>
+        
+        <!-- Nội dung chữ -->
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title" style="color: white;">Các bạn đã tìm đến những ngôi nhà đẹp và mơ ước của bao gia đình</h1>
+                <p class="hero-text">
+                    Chúng tôi cung cấp những ngôi nhà và căn phòng được thiết kế đẹp đẽ, phù hợp với thẩm mĩ của khách hàng. 
+                    Với hơn 10 năm hoạt động trong ngành, chúng tôi tự hào mang đến cho khách hàng những sản phẩm 
+                    và dịch vụ chất lượng cao nhất.
+                </p>
+                <div class="hero-btns">
+                    <a href="#" class="btn btn-primary hero-btn">Tìm hiểu thêm</a>
+                    <a href="#" class="btn btn-outline-light hero-btn">Liên hệ ngay</a>
+                </div>
+            </div>
+        </div>
+    </section><br>
+
+    <div class="search-right">
+        <div class="search-box-right">
+          <input type="text" id="rightSearchInput" placeholder="Tìm sản phẩm..." autocomplete="off">
+          <button id="rightSearchBtn">
+            <i class="fas fa-search"></i>
+          </button>
+          <div class="search-results-right" id="rightSearchResults"></div>
+        </div>
+      </div>
+
+      <div class="container">
+        <header>
+            <h1>Bất Động Sản Cao Cấp</h1>
+            <p class="subtitle">Khám phá những bất động sản đẳng cấp nhất thị trường hiện nay</p>
+        </header>
+        
+        <div class="products-container" id="productsContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+    </div>
+    
+    <header>
+        <h1>Bất Động Sản Cao Cấp</h1>
+        <p class="subtitle">Khám phá những bất động sản đẳng cấp nhất thị trường</p>
+    </header>
+
+    <div class="products-container" id="productsContainer">
+        <div class="loading">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header" id="modalHeader">
+                <h2 class="modal-title" id="modalTitle"></h2>
+            </div>
+            <div class="modal-body">
+                <div class="modal-details">
+                    <div class="modal-price" id="modalPrice"></div>
+                    <div class="modal-location" id="modalLocation"></div>
+                    <div class="modal-description" id="modalDescription"></div>
+                    
+                    <div class="modal-stats">
+                        <div class="modal-stat">
+                            <div class="modal-stat-value" id="modalArea"></div>
+                            <div class="modal-stat-label">Diện tích</div>
+                        </div>
+                        <div class="modal-stat">
+                            <div class="modal-stat-value" id="modalBedrooms"></div>
+                            <div class="modal-stat-label">Phòng ngủ</div>
+                        </div>
+                        <div class="modal-stat">
+                            <div class="modal-stat-value" id="modalBathrooms"></div>
+                            <div class="modal-stat-label">Phòng tắm</div>
+                        </div>
+                        <div class="modal-stat">
+                            <div class="modal-stat-value" id="modalType"></div>
+                            <div class="modal-stat-label">Loại hình</div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-amenities">
+                        <div class="amenities-title">Tiện ích</div>
+                        <div class="amenities-list" id="modalAmenities"></div>
+                    </div>
+                </div>
+                
+                <div class="modal-gallery" id="modalGallery"></div>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <!-- Footer Section -->
+    <footer class="footer-section bg-dark text-white pt-5 pb-4">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Column 1: Giới thiệu -->
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0 animate-on-scroll fade-in">
+                    <div class="footer-logo mb-3">
+                        <a class="navbar-brand" href="btl.html">
+                            <i class="fas fa-rocket me-2"></i>
+                            <span class="logo-text">Brand</span>
+                        </a>
+                    </div>
+                    <p class="mb-3">Công ty hàng đầu trong lĩnh vực bất động sản với hơn 15 năm kinh nghiệm, mang đến những giải pháp tối ưu cho khách hàng.</p>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+    
+                <!-- Column 2: Liên kết nhanh -->
+                <div class="col-lg-2 col-md-6 mb-4 mb-lg-0 animate-on-scroll fade-in" style="transition-delay: 0.1s">
+                    <h5 class="text-uppercase mb-4">Liên kết nhanh</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="btl.html" class="text-white text-decoration-none">Trang chủ</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Giới thiệu</a></li>
+                        <li class="mb-2"><a href="product.html" class="text-white text-decoration-none">Dự án</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Dịch vụ</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Tin tức</a></li>
+                        <li><a href="lienhe.html" class="text-white text-decoration-none">Liên hệ</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Column 3: Dịch vụ -->
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 animate-on-scroll fade-in" style="transition-delay: 0.2s">
+                    <h5 class="text-uppercase mb-4">Dịch vụ</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Mua bán nhà đất</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Cho thuê văn phòng</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Tư vấn đầu tư</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Thiết kế nội thất</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Quản lý bất động sản</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Dịch vụ pháp lý</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Column 4: Liên hệ -->
+                <div class="col-lg-3 col-md-6 animate-on-scroll fade-in" style="transition-delay: 0.3s">
+                    <h5 class="text-uppercase mb-4">Liên hệ</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-3 d-flex">
+                            <i class="fas fa-map-marker-alt me-3 mt-1"></i>
+                            <span>111, đường Phú Lương, Phường Quang Lãm, Hà Đông, Hà Nội</span>
+                        </li>
+                        <li class="mb-3 d-flex">
+                            <i class="fas fa-phone-alt me-3 mt-1"></i>
+                            <div>
+                                <p class="mb-0">Hotline: <a href="tel:0900123456" class="text-white text-decoration-none">0900 0509 2006</a></p>
+                                <p class="mb-0">Điện thoại: <a href="tel:0281234567" class="text-white text-decoration-none">0857 243 819</a></p>
+                            </div>
+                        </li>
+                        <li class="d-flex">
+                            <i class="fas fa-envelope me-3 mt-1"></i>
+                            <div>
+                                <p class="mb-0">Email: <a href="mailto:info@realestate.com" class="text-white text-decoration-none">truong72.minecraft@gmail.com</a></p>
+                                <p class="mb-0">Hỗ trợ: <a href="mailto:support@realestate.com" class="text-white text-decoration-none">chamsockhachhangBRAND@gmail.com</a></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    
+            <hr class="my-4 bg-light">
+    
+            <!-- Bottom Footer -->
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0">&copy; 2023 REAL ESTATE. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="footer-links">
+                        <a href="#" class="text-white text-decoration-none me-3">Chính sách bảo mật</a>
+                        <a href="#" class="text-white text-decoration-none me-3">Điều khoản sử dụng</a>
+                        <a href="#" class="text-white text-decoration-none">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        $(document).ready(function() {
+            // Hiệu ứng scroll navbar
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 50) {
+                    $('.navbar').addClass('scrolled');
+                    
+                    // Hiệu ứng logo nhỏ lại
+                    $('.navbar-brand').css({
+                        'transform': 'scale(0.9)',
+                        'opacity': '0.9'
+                    });
+                } else {
+                    $('.navbar').removeClass('scrolled');
+                    
+                    // Trả lại kích thước ban đầu
+                    $('.navbar-brand').css({
+                        'transform': 'scale(1)',
+                        'opacity': '1'
+                    });
+                }
+            });
+            
+            // Hiệu ứng hover nav-link
+            $('.nav-link').hover(
+                function() {
+                    $(this).css('color', '#4e73df');
+                },
+                function() {
+                    if (!$(this).parent().hasClass('active')) {
+                        $(this).css('color', 'rgba(255, 255, 255, 0.75)');
+                    }
+                }
+            );
+            
+            // Hiệu ứng click nav-item
+            $('.nav-item').click(function() {
+                $('.nav-item').removeClass('active');
+                $(this).addClass('active');
+            });
+            
+            // Hiệu ứng toggle mobile menu
+            $('.navbar-toggler').click(function() {
+                $(this).toggleClass('collapsed');
+                $('.navbar-toggler-icon').toggleClass('active');
+                
+                // Thêm hiệu ứng xoay cho icon
+                if ($(this).hasClass('collapsed')) {
+                    $('.navbar-toggler-icon').css('transform', 'rotate(0deg)');
+                } else {
+                    $('.navbar-toggler-icon').css('transform', 'rotate(90deg)');
+                }
+            });
+            
+            // Smooth scroll cho các link
+            $('a[href*="#"]').on('click', function(e) {
+                e.preventDefault();
+                
+                $('html, body').animate(
+                    {
+                        scrollTop: $($(this).attr('href')).offset().top - 70,
+                    },
+                    800,
+                    'easeInOutExpo'
+                );
+            });
+        });
+
+        // URL của mockAPI - thay bằng URL thực tế của bạn
+        const API_URL = 'https://67be8b5bb2320ee050107734.mockapi.io/api/v1/home';
+        
+        // Format giá tiền VND
+        function formatPrice(price) {
+            return new Intl.NumberFormat('vi-VN', { 
+                style: 'currency', 
+                currency: 'VND',
+                maximumFractionDigits: 0
+            }).format(price);
+        }
+
+        // Lấy icon cho tiện ích
+        function getAmenityIcon(amenity) {
+            const icons = {
+                'Hồ bơi': 'swimming-pool',
+                'Phòng gym': 'dumbbell',
+                'Sân vườn': 'tree',
+                'Bãi đỗ xe ô tô': 'parking',
+                'Khu vui chơi trẻ em': 'child',
+                'Siêu thị': 'shopping-cart',
+                'Bảo vệ 24/7': 'shield-alt',
+                'Thang máy': 'elevator',
+                'Mặt tiền đường nhựa': 'road',
+                'Hệ thống an ninh': 'lock'
+            };
+            return icons[amenity] || 'check';
+        }
+
+        // Hiển thị sản phẩm
+        function displayProducts(products) {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+            
+            if (products.length === 0) {
+                container.innerHTML = '<div class="loading">Không có sản phẩm nào</div>';
+                return;
+            }
+            
+            products.forEach((product, index) => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.style.animationDelay = `${index * 0.1}s`;
+                
+                productCard.innerHTML = `
+                    <div class="product-image" style="background-image: url('${product.images?.[0] || 'https://source.unsplash.com/random/600x400?house'}')">
+                        <span class="product-badge">${product.type}</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-price">${formatPrice(product.price)}</div>
+                        <h3 class="product-title">${product.title}</h3>
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt"></i> ${product.location}
+                        </div>
+                        <div class="product-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${product.area}</div>
+                                <div class="stat-label">m²</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${product.bedrooms}</div>
+                                <div class="stat-label">PN</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${product.bathrooms}</div>
+                                <div class="stat-label">PT</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                productCard.addEventListener('click', () => openModal(product));
+                container.appendChild(productCard);
+            });
+        }
+
+        // Mở modal chi tiết
+        function openModal(product) {
+            const modal = document.getElementById('productModal');
+            const modalHeader = document.getElementById('modalHeader');
+            const galleryContainer = document.getElementById('modalGallery');
+            
+            // Hiển thị thông tin cơ bản
+            document.getElementById('modalTitle').textContent = product.title;
+            document.getElementById('modalPrice').textContent = formatPrice(product.price);
+            document.getElementById('modalLocation').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${product.location}`;
+            document.getElementById('modalDescription').textContent = product.description || 'Không có mô tả chi tiết';
+            document.getElementById('modalArea').textContent = product.area || '--';
+            document.getElementById('modalBedrooms').textContent = product.bedrooms || '--';
+            document.getElementById('modalBathrooms').textContent = product.bathrooms || '--';
+            document.getElementById('modalType').textContent = product.type || '--';
+            
+            // Hiển thị tiện ích
+            const amenitiesList = product.amenities?.map(amenity => 
+                `<span class="amenity"><i class="fas fa-${getAmenityIcon(amenity)}"></i> ${amenity}</span>`
+            ).join('') || '<span>Không có thông tin tiện ích</span>';
+            document.getElementById('modalAmenities').innerHTML = amenitiesList;
+            
+            // Hiển thị hình ảnh
+            modalHeader.style.backgroundImage = `url('${product.images?.[0] || 'https://source.unsplash.com/random/800x600?house'}')`;
+            
+            // Tạo gallery hình ảnh
+            galleryContainer.innerHTML = '';
+            const images = product.images?.length ? product.images : ['https://source.unsplash.com/random/800x600?house'];
+            
+            images.forEach((img, idx) => {
+                const imgItem = document.createElement('div');
+                imgItem.className = idx === 0 ? 'gallery-item main' : 'gallery-item';
+                imgItem.style.backgroundImage = `url('${img}')`;
+                
+                imgItem.addEventListener('click', () => {
+                    modalHeader.style.backgroundImage = `url('${img}')`;
+                });
+                
+                galleryContainer.appendChild(imgItem);
+            });
+            
+            // Hiển thị modal
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Đóng modal
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Lấy dữ liệu từ API
+        async function fetchProducts() {
+            try {
+                const response = await fetch(API_URL);
+                
+                if (!response.ok) {
+                    throw new Error('Không thể tải dữ liệu từ API');
+                }
+                
+                const products = await response.json();
+                displayProducts(products);
+            } catch (error) {
+                console.error('Lỗi khi tải dữ liệu:', error);
+                document.getElementById('productsContainer').innerHTML = `
+                    <div class="loading">
+                        <p style="color: var(--danger);">Có lỗi xảy ra: ${error.message}</p>
+                        <button onclick="fetchProducts()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--primary); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            Thử lại
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Sự kiện đóng modal
+        document.querySelector('.close').addEventListener('click', closeModal);
+        window.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('productModal')) {
+                closeModal();
+            }
+        });
+
+        // Khởi chạy khi trang tải xong
+        document.addEventListener('DOMContentLoaded', fetchProducts);
+    
+
+        // Animation khi scroll đến footer
+    $(window).scroll(function() {
+        $('.animate-on-scroll').each(function() {
+            var elementTop = $(this).offset().top;
+            var elementBottom = elementTop + $(this).outerHeight();
+            var viewportTop = $(window).scrollTop();
+            var viewportBottom = viewportTop + $(window).height();
+            
+            if (elementBottom > viewportTop && elementTop < viewportBottom) {
+                $(this).addClass('fade-in');
+            }
+        });
+    });
+    
+    // Kích hoạt hiệu ứng khi load trang
+    $(window).scroll();
+
+        // Hàm setup thanh tìm kiếm bên phải
+    function setupRightSearch() {
+    const searchInput = document.getElementById('rightSearchInput');
+    const searchBtn = document.getElementById('rightSearchBtn');
+    const searchResults = document.getElementById('rightSearchResults');
+    
+    let allProperties = [];
+    
+    // Lấy dữ liệu từ mockAPI
+    async function fetchProperties() {
+        try {
+        const response = await fetch('https://67be8b5bb2320ee050107734.mockapi.io/api/v1/home');
+        if (!response.ok) throw new Error('Network response was not ok');
+        allProperties = await response.json();
+        } catch (error) {
+        console.error('Error fetching properties:', error);
+        }
+    }
+    
+    // Hiển thị kết quả tìm kiếm
+    function displayResults(results) {
+        searchResults.innerHTML = '';
+        
+        if (results.length === 0) {
+        searchResults.innerHTML = '<div class="no-results-right">Không tìm thấy sản phẩm</div>';
+        return;
+        }
+        
+        results.slice(0, 5).forEach(property => {
+        const item = document.createElement('div');
+        item.className = 'search-result-item-right';
+        item.innerHTML = `
+            <img src="${property.images[0] || 'https://via.placeholder.com/50'}" alt="${property.title}">
+            <div class="search-result-info-right">
+            <div class="search-result-title-right">${property.title}</div>
+            <div class="search-result-price-right">${formatPrice(property.price)}</div>
+            </div>
+        `;
+        
+        item.addEventListener('click', () => {
+            localStorage.setItem('selectedProperty', JSON.stringify(property));
+            window.location.href = `product-detail.html?id=${property.id}`;
+        });
+        
+        searchResults.appendChild(item);
+        });
+    }
+    
+    // Thực hiện tìm kiếm
+    function performSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        
+        if (query === '') {
+        searchResults.classList.remove('show');
+        return;
+        }
+        
+        const results = allProperties.filter(property => 
+        property.title.toLowerCase().includes(query) ||
+        property.location.toLowerCase().includes(query) ||
+        property.type.toLowerCase().includes(query)
+        );
+        
+        displayResults(results);
+        searchResults.classList.add('show');
+    }
+    
+    // Sự kiện tìm kiếm
+    searchInput.addEventListener('input', performSearch);
+    searchBtn.addEventListener('click', performSearch);
+    
+    // Tìm kiếm khi nhấn Enter
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+        performSearch();
+        }
+    });
+    
+    // Đóng kết quả khi click bên ngoài
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-right')) {
+        searchResults.classList.remove('show');
+        }
+    });
+    
+    // Định dạng giá tiền
+    function formatPrice(price) {
+        return new Intl.NumberFormat('vi-VN', { 
+        style: 'currency', 
+        currency: 'VND' 
+        }).format(price);
+    }
+    
+    // Khởi tạo
+    fetchProperties();
+    }
+
+    // Gọi hàm khi trang tải xong
+    document.addEventListener('DOMContentLoaded', setupRightSearch);
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

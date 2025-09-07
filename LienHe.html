@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Navbar chính */
+        .navbar {
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            padding: 20px 0;
+            background-color: rgba(0, 0, 0, 0.8) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .navbar.scrolled {
+            padding: 10px 0;
+            background-color: rgba(0, 0, 0, 0.95) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Logo */
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+        
+        .navbar-brand .logo-text {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .navbar-brand .logo-text::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #4e73df;
+            transition: width 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        .navbar-brand:hover .logo-text::after {
+            width: 100%;
+        }
+        
+        /* Menu items */
+        .nav-item {
+            margin: 0 5px;
+            position: relative;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 8px 20px !important;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.6s ease;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        /* Active item indicator */
+        .nav-item.active .nav-link {
+            color: #4e73df !important;
+        }
+        
+        .nav-item.active .nav-link::after {
+            transform: scaleX(1);
+        }
+        
+        /* Dropdown menu */
+        .dropdown-menu {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-top: 5px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(15px);
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: block;
+        }
+        
+        .dropdown:hover .dropdown-menu,
+        .dropdown:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(5px);
+        }
+        
+        .dropdown-item {
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .dropdown-item::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 5px;
+            background: #4e73df;
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-item:hover {
+            background: transparent;
+            padding-left: 30px;
+            color: #4e73df !important;
+        }
+        
+        .dropdown-item:hover::before {
+            opacity: 1;
+            left: 15px;
+        }
+        
+        /* CTA Button */
+        .nav-cta {
+            background: linear-gradient(135deg, #4e73df 0%, #3a5bbf 100%);
+            color: white !important;
+            border-radius: 30px;
+            padding: 10px 25px !important;
+            margin-left: 15px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
+        }
+        
+        .nav-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(78, 115, 223, 0.4);
+        }
+        
+        .nav-cta::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3a5bbf 0%, #4e73df 100%);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        
+        .nav-cta:hover::after {
+            opacity: 1;
+        }
+        
+        /* Mobile menu */
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                padding: 20px;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+                transform: translateY(-150%);
+                opacity: 0;
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+                border-radius: 0 0 15px 15px;
+            }
+            
+            .navbar-collapse.show {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            .nav-item {
+                margin: 10px 0;
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.4s ease;
+            }
+            
+            .navbar-collapse.show .nav-item {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            
+            /* Tạo hiệu ứng xuất hiện tuần tự */
+            .navbar-collapse.show .nav-item:nth-child(1) { transition-delay: 0.1s; }
+            .navbar-collapse.show .nav-item:nth-child(2) { transition-delay: 0.2s; }
+            .navbar-collapse.show .nav-item:nth-child(3) { transition-delay: 0.3s; }
+            .navbar-collapse.show .nav-item:nth-child(4) { transition-delay: 0.4s; }
+            .navbar-collapse.show .nav-item:nth-child(5) { transition-delay: 0.5s; }
+            
+            .nav-cta {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+        }
+
+        .hero-section {
+            position: relative;
+            height: 80vh;
+            min-height: 500px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            color: white;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-right: 15px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn-primary {
+            background-color: #4e73df;
+            border-color: #4e73df;
+        }
+        
+        .btn-outline-light:hover {
+            color: #333;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                height: 70vh;
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-text {
+                font-size: 1rem;
+            }
+            
+            .hero-btns {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .hero-btn {
+                width: 80%;
+                max-width: 250px;
+                margin-right: 0;
+            }
+        }
+
+        .footer-section {
+        background: linear-gradient(135deg, #2c3e50 0%, #1a2533 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .footer-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover;
+        opacity: 0.05;
+        z-index: 0;
+    }
+    
+    .footer-section > .container {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .footer-logo h2 {
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+    
+    .social-icons a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+    
+    .social-icons a:hover {
+        background: var(--primary-color);
+        transform: translateY(-3px);
+    }
+    
+    .footer-section a:hover {
+        color: var(--primary-color) !important;
+    }
+    
+    .footer-section hr {
+        opacity: 0.1;
+    }
+    
+    /* Animation */
+    .animate-on-scroll {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease;
+    }
+    
+    .fade-in {
+        opacity: 1;
+        transform: translateY(0);
+    }
+       
+    </style>
+</head>
+<body>
+    
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="Trangchu.html">
+                <i class="fas fa-rocket me-2"></i>
+                <span class="logo-text">Brand</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="Trangchu.html">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" aria-expanded="false">
+                            Dịch vụ
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                            <li><a class="dropdown-item" href="#">Bất động sản</a></li>
+                            <li><a class="dropdown-item" href="#">Nhà</a></li>
+                            <li><a class="dropdown-item" href="#">Văn phòng cho thuê</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Xem tất cả</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="DuAn.html">Dự án</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="LienHe.html">Liên hệ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-cta" href="#">
+                            <i class="fas fa-phone-alt me-2"></i>Gọi ngay
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Phần giới thiệu hero section -->
+    <section class="hero-section">
+        <!-- Hình nền -->
+        <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+             alt="Hình nền giới thiệu" class="hero-image">
+        
+        <!-- Lớp phủ màu -->
+        <div class="hero-overlay"></div>
+        
+        <!-- Nội dung chữ -->
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title" style="color: white;">Liên hệ với chúng tôi ngay</h1>
+                <p class="hero-text">
+                    Chúng tôi cung cấp những ngôi nhà và căn phòng được thiết kế đẹp đẽ, phù hợp với thẩm mĩ của khách hàng. 
+                    Với hơn 10 năm hoạt động trong ngành, chúng tôi tự hào mang đến cho khách hàng những sản phẩm 
+                    và dịch vụ chất lượng cao nhất.
+                </p>
+                <div class="hero-btns">
+                    <a href="#" class="btn btn-primary hero-btn">Tìm hiểu thêm</a>
+                    <a href="#" class="btn btn-outline-light hero-btn">Liên hệ ngay</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+            <!-- Form liên hệ -->
+            <div class="row mt-5">
+                <div class="col-lg-6 animate-on-scroll slide-in-left">
+                    <div class="contact-info p-4 p-lg-5 h-100" style="background: linear-gradient(135deg, #4e73df 0%, #3a5bbf 100%); border-radius: 15px; color: white;">
+                        <h3 class="h2 mb-4">Liên Hệ Ngay</h3>
+                        <p class="mb-4">Để lại thông tin, chúng tôi sẽ tư vấn giải pháp tốt nhất cho bạn trong 24h.</p>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-phone-alt fa-lg me-3"></i>
+                            <div>
+                                <h5 class="mb-0">Hotline</h5>
+                                <p class="mb-0">0900 123 456</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="fas fa-envelope fa-lg me-3"></i>
+                            <div>
+                                <h5 class="mb-0">Email</h5>
+                                <p class="mb-0">info@company.com</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-map-marker-alt fa-lg me-3"></i>
+                            <div>
+                                <h5 class="mb-0">Địa chỉ</h5>
+                                <p class="mb-0">123 Nguyễn Văn A, Quận 1, TP.HCM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6 animate-on-scroll slide-in-right">
+                    <div class="contact-form bg-white p-4 p-lg-5 h-100" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);">
+                        <h3 class="h4 mb-4">Để Lại Thông Tin</h3>
+                        <form id="customerForm">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" required placeholder="Nguyễn Văn A">
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="phone" required placeholder="0900 123 456">
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="example@gmail.com">
+                            </div>
+                            <div class="mb-3">
+                                <label for="service" class="form-label">Dịch vụ quan tâm <span class="text-danger">*</span></label>
+                                <select class="form-select" id="service" required>
+                                    <option value="" selected disabled>Chọn dịch vụ</option>
+                                    <option value="buy-house">Mua nhà</option>
+                                    <option value="rent-office">Thuê văn phòng</option>
+                                    <option value="investment">Đầu tư bất động sản</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="message" class="form-label">Nội dung</label>
+                                <textarea class="form-control" id="message" rows="3" placeholder="Nhu cầu cụ thể của bạn..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 py-3">
+                                <i class="fas fa-paper-plane me-2"></i> Gửi Thông Tin
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section><br><br><br>
+    
+    <!-- Footer Section -->
+    <footer class="footer-section bg-dark text-white pt-5 pb-4">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Column 1: Giới thiệu -->
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0 animate-on-scroll fade-in">
+                    <div class="footer-logo mb-3">
+                        <a class="navbar-brand" href="btl.html">
+                            <i class="fas fa-rocket me-2"></i>
+                            <span class="logo-text">Brand</span>
+                        </a>
+                    </div>
+                    <p class="mb-3">Công ty hàng đầu trong lĩnh vực bất động sản với hơn 15 năm kinh nghiệm, mang đến những giải pháp tối ưu cho khách hàng.</p>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+    
+                <!-- Column 2: Liên kết nhanh -->
+                <div class="col-lg-2 col-md-6 mb-4 mb-lg-0 animate-on-scroll fade-in" style="transition-delay: 0.1s">
+                    <h5 class="text-uppercase mb-4">Liên kết nhanh</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="btl.html" class="text-white text-decoration-none">Trang chủ</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Giới thiệu</a></li>
+                        <li class="mb-2"><a href="product.html" class="text-white text-decoration-none">Dự án</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Dịch vụ</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Tin tức</a></li>
+                        <li><a href="lienhe.html" class="text-white text-decoration-none">Liên hệ</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Column 3: Dịch vụ -->
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 animate-on-scroll fade-in" style="transition-delay: 0.2s">
+                    <h5 class="text-uppercase mb-4">Dịch vụ</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Mua bán nhà đất</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Cho thuê văn phòng</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Tư vấn đầu tư</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Thiết kế nội thất</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Quản lý bất động sản</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Dịch vụ pháp lý</a></li>
+                    </ul>
+                </div>
+    
+                <!-- Column 4: Liên hệ -->
+                <div class="col-lg-3 col-md-6 animate-on-scroll fade-in" style="transition-delay: 0.3s">
+                    <h5 class="text-uppercase mb-4">Liên hệ</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-3 d-flex">
+                            <i class="fas fa-map-marker-alt me-3 mt-1"></i>
+                            <span>111, đường Phú Lương, Phường Quang Lãm, Hà Đông, Hà Nội</span>
+                        </li>
+                        <li class="mb-3 d-flex">
+                            <i class="fas fa-phone-alt me-3 mt-1"></i>
+                            <div>
+                                <p class="mb-0">Hotline: <a href="tel:0900123456" class="text-white text-decoration-none">0900 0509 2006</a></p>
+                                <p class="mb-0">Điện thoại: <a href="tel:0281234567" class="text-white text-decoration-none">0857 243 819</a></p>
+                            </div>
+                        </li>
+                        <li class="d-flex">
+                            <i class="fas fa-envelope me-3 mt-1"></i>
+                            <div>
+                                <p class="mb-0">Email: <a href="mailto:info@realestate.com" class="text-white text-decoration-none">truong72.minecraft@gmail.com</a></p>
+                                <p class="mb-0">Hỗ trợ: <a href="mailto:support@realestate.com" class="text-white text-decoration-none">chamsockhachhangBRAND@gmail.com</a></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    
+            <hr class="my-4 bg-light">
+    
+            <!-- Bottom Footer -->
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p class="mb-0">&copy; 2023 REAL ESTATE. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="footer-links">
+                        <a href="#" class="text-white text-decoration-none me-3">Chính sách bảo mật</a>
+                        <a href="#" class="text-white text-decoration-none me-3">Điều khoản sử dụng</a>
+                        <a href="#" class="text-white text-decoration-none">Sitemap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+            
+            
+    </script>
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
